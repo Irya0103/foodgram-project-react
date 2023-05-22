@@ -76,16 +76,16 @@ class User(AbstractUser):
 
 
 class Subscribe(models.Model):
-    User = models.ForeignKey(
+    user = models.ForeignKey(
         User,
         related_name='subscriber',
-        verbose_name='подписчик',
+        verbose_name="Подписчик",
         on_delete=models.CASCADE,
     )
     author = models.ForeignKey(
         User,
         related_name='subscribing',
-        verbose_name='автор',
+        verbose_name="Автор",
         on_delete=models.CASCADE,
     )
 

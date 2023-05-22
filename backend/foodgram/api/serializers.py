@@ -1,20 +1,18 @@
-from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from django.shortcuts import get_object_or_404
-from rest_framework import serializers
-from rest_framework.validators import UniqueTogetherValidator
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
-from rest_framework import status
-from users.models import User
-from users.validators import validate_username
+from rest_framework import serializers, status
 from rest_framework.fields import IntegerField, SerializerMethodField
+from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
+from rest_framework.validators import UniqueTogetherValidator
 from users.models import Subscribe
+from users.validators import validate_username
 
-from .mixins import UsernameValidatorMixin
 
 User = get_user_model()
 
@@ -87,7 +85,7 @@ class SubscribeSerializer(CustomUserSerializer):
         return serializer.data
 
 
-class UserSerializer(serializers.ModelSerializer, UsernameValidatorMixin):
+class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для модели пользователей."""
 
     class Meta:
@@ -110,7 +108,7 @@ class UserPermissionsSerializer(UserSerializer):
         read_only_fields = ('role',)
 
 
-class UserSignUpSerializer(serializers.Serializer, UsernameValidatorMixin):
+class UserSignUpSerializer(serializers.Serializer):
     """Сериализатор для пользовательского входа."""
 
     username = serializers.CharField(
@@ -126,7 +124,7 @@ class UserSignUpSerializer(serializers.Serializer, UsernameValidatorMixin):
     )
 
 
-class TokenSerializer(serializers.Serializer, UsernameValidatorMixin):
+class TokenSerializer(serializers.Serializer):
     """Сериализатор для выдачи токена пользователям (Регистрации)."""
 
     username = serializers.CharField(
@@ -192,8 +190,8 @@ class RecipeReadSerializer(ModelSerializer):
         if user.is_anonymous:
             return False
         return user.shopping_cart.filter(recipe=obj).exists()
-    
-    
+
+
 class IngredientInRecipeWriteSerializer(ModelSerializer):
     id = IntegerField(write_only=True)
 
@@ -226,18 +224,18 @@ class RecipeWriteSerializer(ModelSerializer):
         ingredients = value
         if not ingredients:
             raise ValidationError({
-                'ingredients': 'Нужен хотя бы один ингредиент!'
+                'ingredients': 'Нужен ингредиент'
             })
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
                 raise ValidationError({
-                    'ingredients': 'Ингридиенты не могут повторяться!'
+                    'ingredients': 'Ингридиенты не могут повторяться'
                 })
             if int(item['amount']) <= 0:
                 raise ValidationError({
-                    'amount': 'Количество ингредиента должно быть больше 0!'
+                    'amount': 'Количество ингредиента должно быть больше 0'
                 })
             ingredients_list.append(ingredient)
         return value
@@ -246,7 +244,7 @@ class RecipeWriteSerializer(ModelSerializer):
         tags = value
         if not tags:
             raise ValidationError({
-                'tags': 'Нужно выбрать хотя бы один тег!'
+                'tags': 'Нужно выбрать тег!'
             })
         tags_list = []
         for tag in tags:
@@ -257,3 +255,15 @@ class RecipeWriteSerializer(ModelSerializer):
             tags_list.append(tag)
         return value
 
+
+class RecipeShortSerializer(ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = (
+            'id',
+            'name',
+            'image',
+            'cooking_time'
+        )

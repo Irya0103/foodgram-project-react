@@ -47,7 +47,7 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         related_name='recipes',
-        on_delete=models.SET_NULL, 
+        on_delete=models.SET_NULL,
         null=True,
         verbose_name='Автор',
     )
@@ -159,18 +159,3 @@ class ShoppingCart(models.Model):
 
     def __str__(self):
         return f'{self.user} добавил "{self.recipe}" в Корзину покупок'
-    
-    
-    class IngredientSerializer(ModelSerializer):
-    class Meta:
-        model = Ingredient
-        fields = '__all__'
-
-
-class TagSerializer(ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = '__all__'
-
-
-
