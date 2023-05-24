@@ -1,14 +1,15 @@
-from recipes.models import (Favourite, Ingredient,  Recipe, Tag, ShoppingCart)
-from rest_framework import status
-from rest_framework import viewsets, pagination
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import SAFE_METHODS
-from .permissions import IsAuthorOrReadOnly, IsAdminOrReadOnly
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from .serializers import (IngredientSerializer, TagSerializer,
-                          RecipeShortSerializer,
-                          RecipeReadSerializer, RecipeWriteSerializer,)
+from rest_framework import pagination, status, viewsets
+from rest_framework.permissions import SAFE_METHODS
+from rest_framework.response import Response
+from rest_framework.viewsets import ReadOnlyModelViewSet
+
+from recipes.models import Favourite, Ingredient, Recipe, ShoppingCart, Tag
+
+from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
+from .serializers import (IngredientSerializer, RecipeReadSerializer,
+                          RecipeShortSerializer, RecipeWriteSerializer,
+                          TagSerializer)
 
 
 class IngredientViewSet(ReadOnlyModelViewSet):
@@ -39,8 +40,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk):
         if request.method == 'POST':
             return self.add_to(Favourite, request.user, pk)
-        else:
-            return self.delete_from(Favourite, request.user, pk)
 
     def shopping_cart(self, request, pk):
         if request.method == 'POST':

@@ -1,8 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import CharField, EmailField, TextField
-from django.db.models import UniqueConstraint
+from django.db.models import CharField, EmailField, TextField, UniqueConstraint
 
 from .validators import validate_username
 
