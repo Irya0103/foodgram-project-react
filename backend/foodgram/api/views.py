@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import pagination, status, viewsets
+from rest_framework import status, viewsets
+from .pagination import PageNumberPaginationLimit
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
@@ -27,7 +28,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     permission_classes = (IsAuthorOrReadOnly | IsAdminOrReadOnly,)
-    pagination_class = pagination.LimitOffsetPagination
+    pagination_class = PageNumberPaginationLimit
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
