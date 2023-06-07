@@ -48,7 +48,7 @@ jobs:
             with:
               context: frontend/
               push: true
-              tags: ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_frontend:latest
+              tags: ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_frontendd:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -65,7 +65,7 @@ jobs:
             sudo docker-compose stop
             sudo docker-compose rm backend
             sudo docker rm ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_backend:latest
-            sudo docker rm ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_frontend:latest
+            sudo docker rm ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_frontendd:latest
             sudo rm -f .env
             touch .env
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -76,7 +76,7 @@ jobs:
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             echo SECKET_KEY=${{ secrets.SECKET_KEY }} >> .env
             sudo docker pull ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_backend:latest
-            sudo docker pull ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_frontend:latest
+            sudo docker pull ${{ secrets.DOCKERHUB_LOGIN }}/foodgram_frontendd:latest
             sudo docker-compose up -d --build
 
   send_message:

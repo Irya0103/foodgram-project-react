@@ -20,7 +20,7 @@ services:
       - ./.env
 
   frontend:
-    image: irya0103/foodgram-frontend:latest
+    image: irya0103/foodgram-frontendd:latest
     restart: always
     volumes:
       - ../frontend/:/app/result_build/
