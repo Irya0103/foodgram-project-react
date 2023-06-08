@@ -49,9 +49,11 @@ DB_HOST=db
 DB_PORT=5432
 TOKEN=''
 
-
 Автор проекта: Андреева Ира.
 
 http://158.160.47.22/admin/
 http://158.160.47.22/api/v1/
 http://158.160.47.22/redoc/
+
+
+sudo systemctl stop nginx
