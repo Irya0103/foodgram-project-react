@@ -117,7 +117,6 @@ DJOSER = {
     "LOGIN_FIELD": 'email',
 }
 
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
