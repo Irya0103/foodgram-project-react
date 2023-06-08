@@ -9,9 +9,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    '127.0.0.1',
     '158.160.47.22',
-    'web',
+    'backend',
 ]
 
 AUTH_USER_MODEL = 'users.User'
