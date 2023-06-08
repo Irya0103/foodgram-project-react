@@ -102,6 +102,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 DJOSER = {
     'SERIALIZERS': {
         'user_create': 'api.serializers.CustomUserCreateSerializer',
