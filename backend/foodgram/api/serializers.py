@@ -1,17 +1,17 @@
 from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import F
 from django.shortcuts import get_object_or_404
+from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers
+from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
+from django.core.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
+from rest_framework import serializers
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueTogetherValidator
-from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
 from users.models import Subscribe
 from users.validators import validate_username
 
