@@ -55,5 +55,5 @@ http://158.160.47.22/admin/
 http://158.160.47.22/api/v1/
 http://158.160.47.22/redoc/
 
-sudo systemctl stop nginx
 
+sudo systemctl stop nginx
