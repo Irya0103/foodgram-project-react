@@ -141,12 +141,3 @@ CSV_FILE_PATH = os.path.join(BASE_DIR, 'static/data')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-FIELD_LIMIT = {
-    'username': 150,
-    'email': 254,
-    'first_name': 150,
-    'last_name': 150,
-    'slug': 50,
-    'name': 256,
-    'confirmation_code': 50
-}
