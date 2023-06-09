@@ -140,4 +140,3 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CSV_FILE_PATH = os.path.join(BASE_DIR, 'static/data')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
