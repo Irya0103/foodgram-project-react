@@ -192,6 +192,11 @@ class IngredientInRecipeWriteSerializer(ModelSerializer):
         model = IngredientInRecipe
         fields = ('id', 'amount',)
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["id"] = instance.ingredient.id
+        return data
+
 
 class RecipeWriteSerializer(ModelSerializer):
     tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(),
