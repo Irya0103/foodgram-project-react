@@ -202,7 +202,7 @@ class RecipeWriteSerializer(ModelSerializer):
                                   many=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientInRecipeWriteSerializer(many=True)
-    # image = Base64ImageField()
+    image = Base64ImageField()
 
     class Meta:
         model = Recipe
