@@ -164,13 +164,12 @@ class RecipeReadSerializer(ModelSerializer):
 
     def get_ingredients(self, obj):
         recipe = obj
-        recipe.ingredients.values(
+        return recipe.ingredients.values(
             'id',
             'name',
             'measurement_unit',
             amount=F('ingredientinrecipe__amount')
         )
-        return recipe.ingredients.values
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
@@ -203,7 +202,7 @@ class RecipeWriteSerializer(ModelSerializer):
                                   many=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = IngredientInRecipeWriteSerializer(many=True)
-    image = Base64ImageField()
+    # image = Base64ImageField()
 
     class Meta:
         model = Recipe
@@ -254,15 +253,24 @@ class RecipeWriteSerializer(ModelSerializer):
         return value
 
     @transaction.atomic
+    def create_ingredients_amounts(self, ingredients, recipe):
+        IngredientInRecipe.objects.bulk_create(
+            [IngredientInRecipe(
+                ingredient=Ingredient.objects.get(id=ingredient['id']),
+                recipe=recipe,
+                amount=ingredient['amount']
+            ) for ingredient in ingredients]
+        )
+
+    @transaction.atomic
     def create(self, validated_data):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(**validated_data)
         recipe.tags.set(tags)
-        for ingredient in ingredients:
-            IngredientInRecipe.objects.create(recipe=recipe,
-                                              ingredient=ingredient.get('id'),
-                                              amount=ingredient.get('amount'))
+        self.create_ingredients_amounts(recipe=recipe,
+                                        ingredients=ingredients)
+        return recipe
 
     @transaction.atomic
     def update(self, instance, validated_data):
