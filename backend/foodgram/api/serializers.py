@@ -1,4 +1,3 @@
-from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from django.db.models import F
@@ -13,7 +12,6 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import UniqueTogetherValidator
 from users.models import Subscribe
-from users.validators import validate_username
 
 User = get_user_model()
 
@@ -74,57 +72,6 @@ class SubscribeSerializer(CustomUserSerializer):
             recipes = recipes[:int(limit)]
         serializer = RecipeShortSerializer(recipes, many=True, read_only=True)
         return serializer.data
-
-
-class UserSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        fields = (
-            'username',
-            'email',
-            'first_name',
-            'last_name',
-            'bio',
-            'role'
-        )
-        model = User
-        validators = [
-            UniqueTogetherValidator(
-                queryset=User.objects.all(),
-                fields=('username', 'email')
-            )
-        ]
-
-
-class UserPermissionsSerializer(UserSerializer):
-
-    class Meta(UserSerializer.Meta):
-        read_only_fields = ('role',)
-
-
-class UserSignUpSerializer(serializers.Serializer):
-
-    username = serializers.CharField(
-        max_length=settings.FIELD_LIMIT['username'],
-        required=True,
-        validators=[validate_username]
-    )
-    email = serializers.EmailField(
-        max_length=settings.FIELD_LIMIT['email'],
-        required=True,
-        allow_blank=False,
-        allow_null=False
-    )
-
-
-class TokenSerializer(serializers.Serializer):
-
-    username = serializers.CharField(
-        max_length=settings.FIELD_LIMIT['username'],
-        required=True,
-        validators=[validate_username]
-    )
-    confirmation_code = serializers.CharField(required=True)
 
 
 class IngredientSerializer(serializers.ModelSerializer):
