@@ -1,11 +1,6 @@
 import os
 from pathlib import Path
 
-from dotenv import load_dotenv
-
-load_dotenv()
-
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY', default='p&l%385148kslhtyn^##a1)ilz@4zqj=rq&agdol^##zgl9(vs')
@@ -145,3 +140,13 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 CSV_FILE_PATH = os.path.join(BASE_DIR, 'static/data')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+FIELD_LIMIT = {
+    'username': 150,
+    'email': 254,
+    'first_name': 150,
+    'last_name': 150,
+    'slug': 50,
+    'name': 256,
+    'confirmation_code': 50
+}
