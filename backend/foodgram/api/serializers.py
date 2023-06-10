@@ -5,12 +5,12 @@ from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
+from rest_framework import status
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
-from rest_framework.validators import UniqueTogetherValidator
 from users.models import Subscribe
 
 User = get_user_model()
@@ -55,11 +55,15 @@ class SubscribeSerializer(CustomUserSerializer):
             'recipes_count', 'recipes'
         )
         read_only_fields = ('email', 'username')
-        validators = [
-            UniqueTogetherValidator(
-                queryset=User.objects.all(),
-                fields=('username', 'email')
-            )]
+
+    def validate(self, data):
+        user = self.context.get('request').user
+        if Subscribe.objects.filter(user=user).exists():
+            raise ValidationError(
+                detail='Вы уже подписаны на этого пользователя!',
+                code=status.HTTP_400_BAD_REQUEST
+            )
+        return data
 
     def get_recipes_count(self, obj):
         return obj.recipes.count()
