@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
-from rest_framework import serializers, status
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import IntegerField, SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
@@ -77,16 +77,16 @@ class SubscribeSerializer(CustomUserSerializer):
         return serializer.data
 
 
-class IngredientSerializer(serializers.ModelSerializer):
+class IngredientSerializer(ModelSerializer):
     class Meta:
         model = Ingredient
         fields = '__all__'
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TagSerializer(ModelSerializer):
     class Meta:
         model = Tag
-        fields = ('id', 'name', 'color', 'slug')
+        fields = '__all__'
 
 
 class RecipeReadSerializer(ModelSerializer):
@@ -101,25 +101,26 @@ class RecipeReadSerializer(ModelSerializer):
         model = Recipe
         fields = (
             'id',
-            'name',
-            'image',
             'tags',
             'author',
-            'text',
             'ingredients',
             'is_favorited',
             'is_in_shopping_cart',
+            'name',
+            'image',
+            'text',
             'cooking_time',
         )
 
     def get_ingredients(self, obj):
         recipe = obj
-        return recipe.ingredients.values(
+        ingredients = recipe.ingredients.values(
             'id',
             'name',
             'measurement_unit',
             amount=F('ingredientinrecipe__amount')
         )
+        return ingredients
 
     def get_is_favorited(self, obj):
         user = self.context.get('request').user
@@ -139,12 +140,7 @@ class IngredientInRecipeWriteSerializer(ModelSerializer):
 
     class Meta:
         model = IngredientInRecipe
-        fields = ('id', 'amount',)
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        data["id"] = instance.ingredient.id
-        return data
+        fields = ('id', 'amount')
 
 
 class RecipeWriteSerializer(ModelSerializer):
@@ -158,10 +154,10 @@ class RecipeWriteSerializer(ModelSerializer):
         model = Recipe
         fields = (
             'id',
-            'name',
-            'author',
             'tags',
+            'author',
             'ingredients',
+            'name',
             'image',
             'text',
             'cooking_time',
@@ -171,18 +167,18 @@ class RecipeWriteSerializer(ModelSerializer):
         ingredients = value
         if not ingredients:
             raise ValidationError({
-                'ingredients': 'Нужен ингредиент'
+                'ingredients': 'Нужен хотя бы один ингредиент!'
             })
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
             if ingredient in ingredients_list:
                 raise ValidationError({
-                    'ingredients': 'Ингридиенты не могут повторяться'
+                    'ingredients': 'Ингридиенты не могут повторяться!'
                 })
             if int(item['amount']) <= 0:
                 raise ValidationError({
-                    'amount': 'Количество ингредиента должно быть больше 0'
+                    'amount': 'Количество ингредиента должно быть больше 0!'
                 })
             ingredients_list.append(ingredient)
         return value
@@ -191,7 +187,7 @@ class RecipeWriteSerializer(ModelSerializer):
         tags = value
         if not tags:
             raise ValidationError({
-                'tags': 'Нужно выбрать тег!'
+                'tags': 'Нужно выбрать хотя бы один тег!'
             })
         tags_list = []
         for tag in tags:
