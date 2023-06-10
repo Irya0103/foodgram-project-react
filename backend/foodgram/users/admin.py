@@ -21,4 +21,4 @@ class SubscribeAdmin(admin.ModelAdmin):
     list_display = ('user', 'author',)
 
 
-admin.site.register(User, UserAdmin, Subscribe)
+admin.site.register(User, UserAdmin, Subscribe, SubscribeAdmin)
