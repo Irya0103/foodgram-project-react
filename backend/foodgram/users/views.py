@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from rest_framework import status
 from rest_framework.decorators import action
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from .models import Subscribe
@@ -21,7 +21,7 @@ class CustomUserViewSet(UserViewSet):
     @action(
         detail=True,
         methods=['post', 'delete'],
-        # permission_classes=[IsAuthenticated]
+        permission_classes=[IsAuthenticated]
     )
     def subscribe(self, request, **kwargs):
         user = request.user
@@ -45,7 +45,7 @@ class CustomUserViewSet(UserViewSet):
 
     @action(
         detail=False,
-        # permission_classes=[IsAuthenticated]
+        permission_classes=[IsAuthenticated]
     )
     def subscriptions(self, request):
         user = request.user
