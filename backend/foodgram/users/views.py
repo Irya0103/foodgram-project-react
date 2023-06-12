@@ -35,7 +35,8 @@ class CustomUserViewSet(UserViewSet):
             serializer.is_valid(raise_exception=True)
             Subscribe.objects.create(user=user, author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        if request.method == 'DELETE':
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
     @action(
         detail=False,

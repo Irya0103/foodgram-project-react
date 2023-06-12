@@ -98,7 +98,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         ).values(
             'ingredient__name',
             'ingredient__measurement_unit'
-        ).annotate(amount=Sum('addition'))
+        ).annotate(addition=Sum('amount'))
 
         time = timezone.now()
         time = time.strftime("%d-%m-%Y")
