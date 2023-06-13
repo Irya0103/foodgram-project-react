@@ -9,13 +9,13 @@ from rest_framework.permissions import SAFE_METHODS, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
-from recipes.models import (Favourite, Ingredient, IngredientInRecipe, Recipe, 
+from recipes.models import (Favourite, Ingredient, IngredientInRecipe, Recipe,
                             ShoppingCart, Tag)
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import PageNumberPaginationLimit
 from .permissions import IsAdminOrReadOnly, IsAuthorOrReadOnly
-from .serializers import (IngredientSerializer, RecipeReadSerializer, 
-                          RecipeShortSerializer, RecipeWriteSerializer, 
+from .serializers import (IngredientSerializer, RecipeReadSerializer,
+                          RecipeShortSerializer, RecipeWriteSerializer,
                           TagSerializer)
 
 
