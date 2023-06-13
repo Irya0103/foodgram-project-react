@@ -5,8 +5,8 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from djoser.views import UserViewSet
-from api.pagination import PageNumberPaginationLimit
 
+from api.pagination import PageNumberPaginationLimit
 from api.serializers import CustomUserSerializer, SubscribeSerializer
 from .models import Subscribe
 
