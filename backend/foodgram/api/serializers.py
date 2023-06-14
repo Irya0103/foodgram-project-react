@@ -11,10 +11,8 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 
 from recipes.models import Ingredient, IngredientInRecipe, Recipe, Tag
-
 from users.models import Subscribe
 
-# зачем нас учили пользоваться "isort .", если он вводит в заблуждение?
 
 User = get_user_model()
 
