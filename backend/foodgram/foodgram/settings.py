@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_fremework'
+    'rest_fremework',
     'rest_framework.authtoken',
     'djoser',
     'api',
