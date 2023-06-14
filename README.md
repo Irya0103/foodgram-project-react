@@ -62,7 +62,3 @@ http://158.160.47.22/subscriptions Подписки
 http://158.160.47.22/recipes/create Создание рецепта
 http://158.160.47.22/favorites Избранное
 http://158.160.47.22/cart Список покупок
-
-
-sudo systemctl stop nginx
-//
